@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LoginWebApi.Contracts;
+using LoginWebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,8 +29,11 @@ namespace LoginWebApi.Controllers
 
         // POST: api/User
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] UserRegisterRequest request)
         {
+            //validate user info.
+            Console.WriteLine(request);
+
         }
 
         // PUT: api/User/5

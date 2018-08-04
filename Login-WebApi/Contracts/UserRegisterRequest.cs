@@ -1,11 +1,12 @@
-﻿using System;
+﻿using LoginWebApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LoginWebApi.Models
+namespace LoginWebApi.Contracts
 {
-    public class User
+    public class UserRegisterRequest
     {
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -13,13 +14,16 @@ namespace LoginWebApi.Models
         public string Email { get; set; }
         public string UserPassword { get; set; }
 
-        public override string ToString()
+
+        /*public void RequestValidation()
         {
-            return "UserName: " + UserName +
-                "\nFirstName: " + FirstName +
-                "\nLastName: " + LastName +
-                "\nEmail: " + Email +
-                "\nUserPassword: " + UserPassword;
+            EmailValidation();
+
         }
+        private void EmailValidation()
+        {
+            
+        }
+        */
     }
 }
