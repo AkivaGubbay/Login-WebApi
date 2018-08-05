@@ -9,26 +9,52 @@ namespace LoginWebApi.Models
 {
     public class DAL
     {
-        public static void Registration()
+        // sql data    
+        public static readonly string CONNECTION_STRING = "Data Source=DESKTOP-GT17LEF\\SQLEXPRESS;Initial Catalog=UserAccounts;Integrated Security=True";
+        public static readonly string PARAMETER_USERNAME = "@UserName";
+        public static readonly string PARAMETER_FIRSTNAME = "@FirstName";
+        public static readonly string PARAMETER_LASTNAEM = "@LastName";
+        public static readonly string PARAMETER_EMAIL = "@Email";
+        public static readonly string PARAMETER_USERPASSWORD = "@UserPassword";
+
+        public static void Register(string userName, string firstName, string lastName, string email, string userPassword)
         {
-            //1. Instantiating connection to db.
-            SqlConnection conn = new SqlConnection(GolbalParmeters.CONNECTION_STRING);
+            // Instantiating connection to db
+            SqlConnection conn = new SqlConnection(CONNECTION_STRING);
+            string storedProcName = "spAccount_Add";
             try
             {
-                //2. Open the connection
+                // Open the connection
                 conn.Open();
 
-                // 3.Pass the connection to a command object
-                SqlCommand cmd = new SqlCommand("select * from Customers", conn);
-            }
-            finally { 
-            //close db connection.
-            if (conn != null)
-            {
-                conn.Close();
-            }
-            }
+                // Pass the connection to a command object
+                SqlCommand cmd = new SqlCommand(storedProcName, conn);
 
+                //set the command object so it knows to execute a stored procedure
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                //add parameters to command, which will be passed to the stored procedure
+                cmd.Parameters.Add(new SqlParameter(PARAMETER_USERNAME, userName));
+                cmd.Parameters.Add(new SqlParameter(PARAMETER_FIRSTNAME, firstName));
+                cmd.Parameters.Add(new SqlParameter(PARAMETER_LASTNAEM, lastName));
+                cmd.Parameters.Add(new SqlParameter(PARAMETER_EMAIL, email));
+                cmd.Parameters.Add(new SqlParameter(PARAMETER_USERPASSWORD, userPassword));
+
+                //// execute the bastard
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                Console.WriteLine("My Error: sql connection problem at Register() ...");
+            }
+            finally
+            {
+                // 4. Close the connection
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }

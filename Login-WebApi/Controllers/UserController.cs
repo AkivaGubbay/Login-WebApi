@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using LoginWebApi.Contracts;
 using LoginWebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+
+
 
 namespace LoginWebApi.Controllers
 {
@@ -29,12 +34,21 @@ namespace LoginWebApi.Controllers
 
         // POST: api/User
         [HttpPost]
-        public void Post([FromBody] UserRegisterRequest request)
+        public HttpResponseMessage Post([FromBody] UserRegisterRequest request)
         {
-            //validate user info.
-            Console.WriteLine(request);
-
-        }
+            // Validate user input
+            if (ModelState.IsValid)
+            {
+                // register request
+                DAL.Register(request.UserName, request.FirstName, request.LastName, request.Email, request.UserPassword);
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
+            {
+                HttpResponseMessage badRequestMsg = new HttpResponseMessage();
+                //HttpResponseMessage badRequestMsg =  new HttpResponseMessage(HttpStatusCode.BadRequest);
+                //return this.Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+            }
 
         // PUT: api/User/5
         [HttpPut("{id}")]
